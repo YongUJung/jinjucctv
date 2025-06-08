@@ -1,24 +1,14 @@
 import streamlit as st
 import pandas as pd
-import folium
-from streamlit_folium import st_folium
 
-st.title("📍 진주시 CCTV 지도")
+st.title("CSV 파일 컬럼명 확인")
+
+# CSV 절대 경로 (윈도우용, 꼭 r붙이기!)
+csv_path = r"C:\Users\dyddn\OneDrive\바탕 화면\volcano_data_2010.csv"
 
 # CSV 불러오기
-data = pd.read_csv('volcano_data_2010.csv')
+data = pd.read_csv(csv_path)
 
-# 평균 위치를 기준으로 지도 중심 설정
-map_center = [data['latitude'].mean(), data['longitude'].mean()]
-m = folium.Map(location=map_center, zoom_start=13)
+# 컬럼명 리스트 화면에 출력하기
+st.write("CSV 컬럼명:", data.columns.tolist())
 
-# 마커 추가
-for _, row in data.iterrows():
-    folium.Marker(
-        location=[row['latitude'], row['longitude']],
-        popup=row['name'],  # CCTV 이름
-        icon=folium.Icon(color='red', icon='camera')
-    ).add_to(m)
-
-# Streamlit에서 지도 표시
-st_data = st_folium(m, width=700, height=500)
